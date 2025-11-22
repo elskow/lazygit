@@ -8,7 +8,7 @@ import (
 	"github.com/jesseduffield/lazygit/pkg/gui/style"
 	"github.com/jesseduffield/lazygit/pkg/utils"
 	"github.com/lucasb-eyer/go-colorful"
-	"github.com/mattn/go-runewidth"
+	"github.com/rivo/uniseg"
 )
 
 type authorNameCacheKey struct {
@@ -114,9 +114,9 @@ func getInitials(authorName string) string {
 		return authorName
 	}
 
-	firstRune := getFirstRune(authorName)
-	if runewidth.RuneWidth(firstRune) > 1 {
-		return string(firstRune)
+	firstChar, _, width, _ := uniseg.FirstGraphemeClusterInString(authorName, -1)
+	if width > 1 {
+		return firstChar
 	}
 
 	split := strings.Split(authorName, " ")
